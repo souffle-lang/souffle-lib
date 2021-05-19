@@ -19,7 +19,6 @@ The setup of the library may be as simple as:
 
 #+RESULTS:
 #+begin_example
-./configure
 configure: creating ./config.status
 config.status: creating math.dl
 configure: creating ./config.status

@@ -26,13 +26,13 @@ libfunctors.so: datetime.cpp
 	g++ -shared -fPIC datetime.cpp -o libfunctors.so
 
 datetime.cpp: configure
-	./configure
+	@./configure
 
 math.dl: configure
-	./configure
+	@./configure
 
 test.dl: configure
-	./configure
+	@./configure
 
 configure: configure.ac
 	autoconf
