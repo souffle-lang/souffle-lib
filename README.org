@@ -9,9 +9,9 @@
 
 By default, Souffle is compiled with C `int32_t` and `float` for the  `number` and `float` types, respectively. Souffle can also be configures to use `int64_t` and `double` for those types by using =./configure --enable-64bit-domain=. We have have used `autoconf` and `configure` to allow for these differences.
 
-* Math functions
+* Setup
 
-The C99 math function names vary for `float` and `double`. We have provided for each in [[https://github.com/souffle-lang/souffle-lib/blob/main/math_32.dl][math_32.dl]] and [[https://github.com/souffle-lang/souffle-lib/blob/main/math_64.dl][math_64.dl]], respectively. These files provide documentation on the calls (which simply call the C functions of the same names). The setup of the library may be as simple as:
+The setup of the library may be as simple as:
 
 #+BEGIN_SRC shell :exports both :results verbatim
   make clean && make
@@ -31,6 +31,11 @@ config.status: creating test.dl
 config.status: creating datetime.cpp
 g++ -shared -fPIC datetime.cpp -o libfunctors.so
 #+end_example
+
+
+* Math functions
+
+The C99 math function names vary for `float` and `double`. We have provided for each in [[https://github.com/souffle-lang/souffle-lib/blob/main/math_32.dl][math_32.dl]] and [[https://github.com/souffle-lang/souffle-lib/blob/main/math_64.dl][math_64.dl]], respectively. These files provide documentation on the calls (which simply call the C functions of the same names).
 
 As a simple example and assuming a 64-bit configuration, we have the following Souffle [[https://github.com/souffle-lang/souffle-lib/blob/main/test_64.dl][test_64.dl]] file (we could also have used the math.dl function, which is configured to switch between test_32.dl and test_64.dl):
 
