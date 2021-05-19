@@ -1,4 +1,4 @@
-#include "math.dl"
+#include "math_64.dl"
 
 .decl Summary(label: symbol, y: float)
 Summary("to_float(\"NaN\")", to_float("NaN")) :- true.

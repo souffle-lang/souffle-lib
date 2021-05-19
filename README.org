@@ -1,35 +1,100 @@
-#+title: C math functions/functors for Souffle
+#+title: C libraries for Souffle
 #+author: Mark Clements
 
 #+options: toc:nil html-postamble:nil num:nil
 
 * Introduction
 
-[[https://souffle-lang.github.io/index.html][Souffle]] is a capable Datalog implementation which allows for easy integration with C functions. This package defines a set of functors for using some of the C math functions in Souffle (assuming double precision, with =./configure --enable-64bit-domain=).
+[[https://souffle-lang.github.io/index.html][Souffle]] is a capable Datalog implementation which allows for relatively easy integration with C functions. This library defines a set of functors for using some of the C math and datetime (timestamp) functions in Souffle.
+
+By default, Souffle is compiled with C `int32_t` and `float` for the  `number` and `float` types, respectively. Souffle can also be configures to use `int64_t` and `double` for those types by using =./configure --enable-64bit-domain=. We have have used `autoconf` and `configure` to allow for these differences.
+
+* Math functions
 
 As a simple example, we have the following Souffle [[https://github.com/mclements/souffle-math/blob/main/test.dl][test.dl]] file:
 
+The C99 math function names vary for `float` and `double`. We have provided for each in [[https://github.com/souffle-lang/souffle-lib/blob/main/math_32.dl][math_32.dl]] and [[https://github.com/souffle-lang/souffle-lib/blob/main/math_64.dl][math_64.dl]], respectively. These files provide documentation on the calls (which simply call the C functions of the same names). Assuming doubles:
+
 #+BEGIN_SRC shell :exports results :results verbatim
-  cat test.dl
+  cat test_64.dl
 #+END_SRC
 
 #+RESULTS:
-: #include "math.dl"
+: #include "math_64.dl"
 : 
 : .decl Summary(label: symbol, y: float)
+: Summary("to_float(\"NaN\")", to_float("NaN")) :- true.
+: Summary("@exp(NaN)", @exp(to_float("NaN"))) :- true.
 : Summary("@exp(1.0)", @exp(1.0)) :- true.
 : Summary("@log(@exp(1.0))", @log(@exp(1.0))) :- true.
 : .output Summary
 
-This reads in the functor definitions, declares a Summary relationship, and calculates two values. The code to run this in the interpreter may be as simple as =souffle -lm test.dl= or in the compiler using =souffle -c -lm test.dl=. When =libm= is an ld script, this code will not work for the Souffle interpreter. We provide a bash script =lib_ldscript= for transforming the library arguments when there is an ld script. As an example:
+This reads in the functor definitions, declares a Summary relationship, and calculates two values. The code to run this in the interpreter may be as simple as =souffle -lm test_64.dl= or in the compiler using =souffle -c -lm test_64.dl=. When =libm= is an ld script, this code will not work for the Souffle interpreter. We provide a bash script =lib_ldscript= for transforming the library arguments when there is an ld script. As an example:
 
 #+BEGIN_SRC shell :exports both
-  souffle `lib_ldscript -lm` test.dl
-  cat Summary.csv
+  souffle -D- `lib_ldscript -lm` test_64.dl
 #+END_SRC
 
 #+RESULTS:
+| --------------- |                   |
+| Summary         |                   |
+| label           |                 y |
+| =============== |                   |
+| NaN\            |                 0 |
+| @exp(NaN)       |                 1 |
 | @exp(1.0)       | 2.718281828459045 |
 | @log(@exp(1.0)) |                 1 |
+| =============== |                   |
 
-Documentation is available in the [[https://github.com/mclements/souffle-math/blob/main/math.dl][math.dl]] file.
+* Datetime (timestamps)
+
+This library also defines a small set of functors for using some of the C date-time functions.
+
+As a simple example, we have the following Souffle [[https://github.com/souffle-lang/souffle-lib/blob/main/test_datetime.dl][test_datetime.dl]] file:
+
+#+BEGIN_SRC shell :exports results :results verbatim
+  cat test_datetime.dl
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+#include "datetime.dl"
+
+.decl Times(timestamp:timestamp)
+.decl Test(operator:symbol, timestamp:timestamp, result:symbol)
+
+Times(@from_date("1970-01-01")) :- true.
+Times(@from_date_time("1970-01-02 00:00:00")) :- true.
+Times(@to_timestamp("03/01/1970", "%d/%m/%Y")) :- true.
+Times(@localtimestamp()) :- true.
+Times(@from_date("")) :- true.
+
+Test("@to_day	", timestamp, to_string(@to_day(timestamp))) :- Times(timestamp).
+Test("@to_date", timestamp, @to_date(timestamp)) :- Times(timestamp).
+Test("@to_date_time", timestamp, @to_date_time(timestamp)) :- Times(timestamp).
+Test("@from_timestamp", timestamp, @from_timestamp(timestamp,"%d/%m/%Y")) :- Times(timestamp).
+Test("@age	", timestamp1, to_string(@age(timestamp1,timestamp2))) :-
+    Times(timestamp1), Times(timestamp2), timestamp1>timestamp2.
+
+.output Test
+#+end_example
+
+This reads in the functor definitions, declares relationships for times and test results, and calculates test results for each of the times. The code to run this in the interpreter is =souffle test.dl= or, in the compiler, =souffle -c test.dl=. As an example:
+
+#+BEGIN_SRC shell :exports both
+  g++ -shared -fPIC datetime.cpp -o libfunctors.so
+  souffle -D- test.dl
+#+END_SRC
+
+#+RESULTS:
+| --------------- |                   |
+| Summary         |                   |
+| label           |                 y |
+| =============== |                   |
+| NaN\            |                 0 |
+| @exp(NaN)       |                 1 |
+| @exp(1.0)       | 2.718281828459045 |
+| @log(@exp(1.0)) |                 1 |
+| =============== |                   |
+
+Documentation is available in the [[https://github.com/souffle-lang/souffle-lib/blob/main/datetime.dl][datetime.dl]] file.
