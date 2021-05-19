@@ -1,0 +1,81 @@
+#include <ctime>
+#include <cstdint>
+
+#define int_type @SOUFFLE_INT_TYPE@
+
+extern "C" {
+
+  /*
+  Timestamp based on C's time_t converted to int_type.
+
+  Currently ignores struct tm (except as an intermediate format).
+  One issue with struct tm is that we would need multiple functor calls to return the individual 
+  components.
+
+  Primarily use localtime time_t values (also known as Unix timestamps).
+  Adjust for localdiff() when necessary -- see to_day().
+
+  TODO: select a standard date-time API.
+  */ 
+  
+  int_type localtimestamp() {
+    return time(0);
+  }
+
+  int_type to_timestamp(const char* string, const char* format) {
+    struct tm tmInfo = {0};
+    strptime(string, format, &tmInfo);
+    return mktime(&tmInfo); // localtime
+  }
+  
+  int_type from_date(const char* date) {
+    return to_timestamp(date, "%Y-%m-%d");
+  }
+
+  int_type from_date_time(const char* date) {
+    return to_timestamp(date, "%Y-%m-%d %H:%M:%S");
+  }
+
+  int_type age(const int_type event_timestamp, const int_type birth_timestamp) {
+    time_t birth(birth_timestamp), event(event_timestamp);
+    struct tm tmBirth = *localtime(&birth), tmEvent = *localtime(&event);
+    int_type a = tmEvent.tm_year - tmBirth.tm_year;
+    if ((tmEvent.tm_mon < tmBirth.tm_mon) ||
+	((tmEvent.tm_mon == tmBirth.tm_mon) && (tmEvent.tm_mday < tmBirth.tm_mday)))
+      a -= 1;
+    return a;
+  }
+
+  int_type localdiff() {
+    time_t rawtime = time(NULL);
+    struct tm *ptm = gmtime(&rawtime);
+    int tm_isdst = ptm->tm_isdst;
+    // Request that mktime() looks up dst in timezone database
+    ptm->tm_isdst = -1;                
+    time_t gmt = mktime(ptm);
+    return difftime(rawtime, gmt)-3600*ptm->tm_isdst;
+  }
+
+  int_type to_day(int_type timestamp) {
+    // localtime adjustment for correct day calculations
+    return (timestamp+localdiff())/86400; 
+  }
+
+  const char* from_timestamp(int_type timestamp, const char *format) {
+    char * buf = new char[100]; // is this memory safe?
+    time_t t(timestamp);
+    strftime(buf, 20, format, localtime(&t));
+    return buf;
+  }
+  
+  const char* to_date(int_type timestamp) {
+    return from_timestamp(timestamp, "%Y-%m-%d");
+  }
+
+  const char* to_date_time(int_type timestamp) {
+    return from_timestamp(timestamp, "%Y-%m-%d %H:%M:%S");
+  }
+
+}
+
+#undef int_type

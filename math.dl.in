@@ -1,0 +1,7 @@
+#if @SOUFFLE_BITS@ == 32
+#include "math_32.dl"
+#endif
+
+#if @SOUFFLE_BITS@ == 64
+#include "math_64.dl"
+#endif

@@ -1,0 +1,35 @@
+#+title: C math functions/functors for Souffle
+#+author: Mark Clements
+
+#+options: toc:nil html-postamble:nil num:nil
+
+* Introduction
+
+[[https://souffle-lang.github.io/index.html][Souffle]] is a capable Datalog implementation which allows for easy integration with C functions. This package defines a set of functors for using some of the C math functions in Souffle (assuming double precision, with =./configure --enable-64bit-domain=).
+
+As a simple example, we have the following Souffle [[https://github.com/mclements/souffle-math/blob/main/test.dl][test.dl]] file:
+
+#+BEGIN_SRC shell :exports results :results verbatim
+  cat test.dl
+#+END_SRC
+
+#+RESULTS:
+: #include "math.dl"
+: 
+: .decl Summary(label: symbol, y: float)
+: Summary("@exp(1.0)", @exp(1.0)) :- true.
+: Summary("@log(@exp(1.0))", @log(@exp(1.0))) :- true.
+: .output Summary
+
+This reads in the functor definitions, declares a Summary relationship, and calculates two values. The code to run this in the interpreter may be as simple as =souffle -lm test.dl= or in the compiler using =souffle -c -lm test.dl=. When =libm= is an ld script, this code will not work for the Souffle interpreter. We provide a bash script =lib_ldscript= for transforming the library arguments when there is an ld script. As an example:
+
+#+BEGIN_SRC shell :exports both
+  souffle `lib_ldscript -lm` test.dl
+  cat Summary.csv
+#+END_SRC
+
+#+RESULTS:
+| @exp(1.0)       | 2.718281828459045 |
+| @log(@exp(1.0)) |                 1 |
+
+Documentation is available in the [[https://github.com/mclements/souffle-math/blob/main/math.dl][math.dl]] file.

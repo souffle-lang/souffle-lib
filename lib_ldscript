@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Update libs for GNU ld scripts
+# Assumes that the binary is the first indicated in whereis
+# and the references are part of "GROUP"
+
+# depends on: whereis, sed, file, basename
+
+shortname () {
+    echo -n $(basename $1 | sed -n 's/^lib\(.*\)[.][aso]/\1/p')' '
+}
+processArg () {
+    # remove the -l prefix and define libname
+    libname=$(echo $1 | sed -n 's/[-]l\(.*\)/lib\1.so/p')
+    if [ -n "$libname" ]
+    then
+	# extract the *first* library in whereis
+	fullname=$(whereis -b $libname | sed -n 's/[^ :]*[:] \([^ ]*\).*/\1/p')
+	if [ -e $fullname ]
+	then
+	    if [ "$(file -b $fullname)"="ASCII text" ]
+	    then
+		# extract the filenames after GROUP
+		lst=( $(sed -n 's/^GROUP *[(] *\([^)]*\) *.*/\1/p' $fullname) )
+		if [ -n "$lst" ]
+		then
+		    for j in ${lst[@]}; do
+			echo -n -l$(shortname $j)' '
+		    done
+		    exit
+		fi
+	    fi
+	fi
+    fi
+    # if fails somewhere then return the original input
+    echo -n $1' '
+}
+args=$*
+for i in ${args[@]}; do
+    echo -n $(processArg $i)' '
+done

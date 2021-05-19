@@ -1,0 +1,63 @@
+// Returns the arc cosine of x in radians.
+.functor acos(x: float): float
+
+// Returns the arc sine of x in radians.
+.functor asin(x: float): float
+
+// Returns the arc tangent of x in radians.
+.functor atan(x: float): float
+
+// Returns the arc tangent in radians of y/x based on the signs of both values to determine the correct quadrant.
+.functor atan2(y: float, x: float): float
+
+// Returns the cosine of a radian angle x.
+.functor cos(x: float): float
+
+// Returns the hyperbolic cosine of x.
+.functor cosh(x: float): float
+
+// Returns the sine of a radian angle x.
+.functor sin(x: float): float
+
+// Returns the hyperbolic sine of x.
+.functor sinh(x: float): float
+
+// Returns the hyperbolic tangent of x.
+.functor tanh(x: float): float
+
+// Returns the value of e raised to the xth power.
+.functor exp(x: float): float
+
+// The returned value is the mantissa and the integer pointed to by exponent is the exponent. The resultant value is x = mantissa * 2 ^ exponent.
+// double frexp(double x, int *exponent)
+
+// Returns x multiplied by 2 raised to the power of exponent.
+.functor ldexp(x: float, exponent: number): float
+
+// Returns the natural logarithm (base-e logarithm) of x.
+.functor log(x: float): float
+
+// Returns the common logarithm (base-10 logarithm) of x.
+.functor log10(x: float): float
+
+// The returned value is the fraction component (part after the decimal), and sets integer to the integer component.
+// double modf(double x, double *integer)
+
+// Returns x raised to the power of y.
+.functor pow(x: float, y: float): float
+
+// Returns the square root of x.
+.functor sqrt(x: float): float
+
+// Returns the smallest integer value greater than or equal to x.
+.functor ceil(x: float): float
+
+// Returns the absolute value of x.
+.functor fabs(x: float): float
+
+// Returns the largest integer value less than or equal to x.
+.functor floor(x: float): float
+
+// Returns the remainder of x divided by y.
+.functor fmod(x: float, y: float): float
+

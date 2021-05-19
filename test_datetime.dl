@@ -1,0 +1,19 @@
+#include "datetime.dl"
+
+.decl Times(timestamp:timestamp)
+.decl Test(operator:symbol, timestamp:timestamp, result:symbol)
+
+Times(@from_date("1970-01-01")) :- true.
+Times(@from_date_time("1970-01-02 00:00:00")) :- true.
+Times(@to_timestamp("03/01/1970", "%d/%m/%Y")) :- true.
+Times(@localtimestamp()) :- true.
+Times(@from_date("")) :- true.
+
+Test("@to_day	", timestamp, to_string(@to_day(timestamp))) :- Times(timestamp).
+Test("@to_date", timestamp, @to_date(timestamp)) :- Times(timestamp).
+Test("@to_date_time", timestamp, @to_date_time(timestamp)) :- Times(timestamp).
+Test("@from_timestamp", timestamp, @from_timestamp(timestamp,"%d/%m/%Y")) :- Times(timestamp).
+Test("@age	", timestamp1, to_string(@age(timestamp1,timestamp2))) :-
+    Times(timestamp1), Times(timestamp2), timestamp1>timestamp2.
+
+.output Test

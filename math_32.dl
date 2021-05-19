@@ -1,0 +1,63 @@
+// Returns the arc cosine of x in radians.
+.functor acosf(x: float): float
+
+// Returns the arc sine of x in radians.
+.functor asinf(x: float): float
+
+// Returns the arc tangent of x in radians.
+.functor atanf(x: float): float
+
+// Returns the arc tangent in radians of y/x based on the signs of both values to determine the correct quadrant.
+.functor atan2f(y: float, x: float): float
+
+// Returns the cosine of a radian angle x.
+.functor cosf(x: float): float
+
+// Returns the hyperbolic cosine of x.
+.functor coshf(x: float): float
+
+// Returns the sine of a radian angle x.
+.functor sinf(x: float): float
+
+// Returns the hyperbolic sine of x.
+.functor sinhf(x: float): float
+
+// Returns the hyperbolic tangent of x.
+.functor tanhf(x: float): float
+
+// Returns the value of e raised to the xth power.
+.functor expf(x: float): float
+
+// The returned value is the mantissa and the integer pointed to by exponent is the exponent. The resultant value is x = mantissa * 2 ^ exponent.
+// double frexp(double x, int *exponent)
+
+// Returns x multiplied by 2 raised to the power of exponent.
+.functor ldexpf(x: float, exponent: number): float
+
+// Returns the natural logarithm (base-e logarithm) of x.
+.functor logf(x: float): float
+
+// Returns the common logarithm (base-10 logarithm) of x.
+.functor log10f(x: float): float
+
+// The returned value is the fraction component (part after the decimal), and sets integer to the integer component.
+// double modf(double x, double *integer)
+
+// Returns x raised to the power of y.
+.functor powf(x: float, y: float): float
+
+// Returns the square root of x.
+.functor sqrtf(x: float): float
+
+// Returns the smallest integer value greater than or equal to x.
+.functor ceilf(x: float): float
+
+// Returns the absolute value of x.
+.functor fabsf(x: float): float
+
+// Returns the largest integer value less than or equal to x.
+.functor floorf(x: float): float
+
+// Returns the remainder of x divided by y.
+.functor fmodf(x: float, y: float): float
+

@@ -1,0 +1,13 @@
+*~
+*.csv
+README.html
+notes.org
+autom4te.cache
+config.log
+config.status
+configure
+test.dl
+math.dl
+.lineno
+datetime.cpp
+libfunctors.so

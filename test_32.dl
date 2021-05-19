@@ -1,0 +1,8 @@
+#include "math_32.dl"
+
+.decl Summary(label: symbol, y: float)
+Summary("to_float(\"NaN\")", to_float("NaN")) :- true.
+Summary("@expf(NaN)", @expf(to_float("NaN"))) :- true.
+Summary("@expf(1.0)", @expf(1.0)) :- true.
+Summary("@logf(@exp(1.0))", @logf(@expf(1.0))) :- true.
+.output Summary

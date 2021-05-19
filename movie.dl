@@ -1,0 +1,233 @@
+#include "datetime.dl"
+
+.decl Person(id:number, name:symbol, born:symbol, death:symbol)
+.decl Movie(id:number, title:symbol, year:number, director:number)
+.decl Cast(movie_id:number, person_id:number)
+.decl Sequel(movie_id:number, sequel_id:number)
+.decl Trivia(movie_id:number, text:symbol)
+ 
+Person(-100, "James Cameron", "1954-08-16", "").
+Person(-101, "Arnold Schwarzenegger", "1947-07-30", "").
+Person(-102, "Linda Hamilton", "1956-09-26", "").
+Person(-103, "Michael Biehn", "1956-07-31", "").
+Person(-104, "Ted Kotcheff", "1931-04-07", "").
+Person(-105, "Sylvester Stallone", "1946-07-06", "").
+Person(-106, "Richard Crenna", "1926-11-30", "2003-01-17").
+Person(-107, "Brian Dennehy", "1938-07-09", "").
+Person(-108, "John McTiernan", "1951-01-08", "").
+Person(-109, "Elpidia Carrillo", "1961-08-16", "").
+Person(-110, "Carl Weathers", "1948-01-14", "").
+Person(-111, "Richard Donner", "1930-04-24", "").
+Person(-112, "Mel Gibson", "1956-01-03", "").
+Person(-113, "Danny Glover", "1946-07-22", "").
+Person(-114, "Gary Busey", "1944-07-29", "").
+Person(-115, "Paul Verhoeven", "1938-07-18", "").
+Person(-116, "Peter Weller", "1947-06-24", "").
+Person(-117, "Nancy Allen", "1950-06-24", "").
+Person(-118, "Ronny Cox", "1938-07-23", "").
+Person(-119, "Mark L. Lester", "1946-11-26", "").
+Person(-120, "Rae Dawn Chong", "1961-02-28", "").
+Person(-121, "Alyssa Milano", "1972-12-19", "").
+Person(-122, "Bruce Willis", "1955-03-19", "").
+Person(-123, "Alan Rickman", "1946-02-21", "").
+Person(-124, "Alexander Godunov", "1949-11-28", "1995-05-18").
+Person(-125, "Robert Patrick", "1958-11-05", "").
+Person(-126, "Edward Furlong", "1977-08-02", "").
+Person(-127, "Jonathan Mostow", "1961-11-28", "").
+Person(-128, "Nick Stahl", "1979-12-05", "").
+Person(-129, "Claire Danes", "1979-04-12", "").
+Person(-130, "George P. Cosmatos", "1941-01-04", "2005-04-19").
+Person(-131, "Charles Napier", "1936-04-12", "2011-10-05").
+Person(-132, "Peter MacDonald", "", "").
+Person(-133, "Marc de Jonge", "1949-02-16", "1996-06-06").
+Person(-134, "Stephen Hopkins", "", "").
+Person(-135, "Ruben Blades", "1948-07-16", "").
+Person(-136, "Joe Pesci", "1943-02-09", "").
+Person(-137, "Ridley Scott", "1937-11-30", "").
+Person(-138, "Tom Skerritt", "1933-08-25", "").
+Person(-139, "Sigourney Weaver", "1949-10-08", "").
+Person(-140, "Veronica Cartwright", "1949-04-20", "").
+Person(-141, "Carrie Henn", "", "").
+Person(-142, "George Miller", "1945-03-03", "").
+Person(-143, "Steve Bisley", "1951-12-26", "").
+Person(-144, "Joanne Samuel", "", "").
+Person(-145, "Michael Preston", "1938-05-14", "").
+Person(-146, "Bruce Spence", "1945-09-17", "").
+Person(-147, "George Ogilvie", "1931-03-05", "").
+Person(-148, "Tina Turner", "1939-11-26", "").
+Person(-149, "Sophie Marceau", "1966-11-17", "").
+
+Movie(-200, "The Terminator", 1984, -100).
+Cast(-200, -101).
+Cast(-200, -102).
+Cast(-200, -103).
+Sequel(-200, -207).
+
+Movie(-201, "First Blood", 1982, -104).
+Cast(-201, -105).
+Cast(-201, -106).
+Cast(-201, -105).
+Sequel(-201, -209).
+
+Movie(-202, "Predator", 1987, -108).
+Cast(-202, -101).
+Cast(-202, -109).
+Cast(-202, -110).
+Sequel(-202, -211).
+
+Movie(-203, "Lethal Weapon", 1987, -111).
+Cast(-203, -112).
+Cast(-203, -113).
+Cast(-203, -114).
+Sequel(-203, -212).
+
+Movie(-204, "RoboCop", 1987, -115).
+Cast(-204, -116).
+Cast(-204, -117).
+Cast(-204, -118).
+
+Movie(-205, "Commando", 1985, -119).
+Cast(-205, 101).
+Cast(-205, 120).
+Cast(-205, 121).
+Trivia(-205, "In 1986, a sequel was written with an eye to having John McTiernan direct. Schwarzenegger wasn't interested in reprising the role. The script was then reworked with a new central character, eventually played by Bruce Willis, and became Die Hard").
+
+Movie(-206, "Die Hard", 1988, -108).
+Cast(-206, -122).
+Cast(-206, -123).
+Cast(-206, -124).
+
+Movie(-207, "Terminator 2: Judgment Day", 1991, -100).
+Cast(-207, -101).
+Cast(-207, -102).
+Cast(-207, -125).
+Cast(-207, -126).
+Sequel(-207, -208).
+
+Movie(-208, "Terminator 3: Rise of the Machines", 2003, -127).
+Cast(-208, -101).
+Cast(-208, -128).
+Cast(-208, -129).
+
+Movie(-209, "Rambo: First Blood Part II", 1985, -130).
+Cast(-209, -105).
+Cast(-209, -106).
+Cast(-209, -131).
+Sequel(-209, -210).
+
+Movie(-210, "Rambo III", 1988, -132).
+Cast(-210, -105).
+Cast(-210, -106).
+Cast(-210, -133).
+
+Movie(-211, "Predator 2", 1990, -134).
+Cast(-211, -113).
+Cast(-211, -114).
+Cast(-211, -135).
+
+Movie(-212, "Lethal Weapon 2", 1989, -111).
+Cast(-212, -112).
+Cast(-212, -113).
+Cast(-212, -136).
+Sequel(-212, -213).
+
+Movie(-213, "Lethal Weapon 3", 1992, -111).
+Cast(-213, -112).
+Cast(-213, -113).
+Cast(-213, -136).
+
+Movie(-214, "Alien", 1979, -137).
+Cast(-214, -138).
+Cast(-214, -139).
+Cast(-214, -140).
+Sequel(-214, -215).
+
+Movie(-215, "Aliens", 1986, -100).
+Cast(-215, -139).
+Cast(-215, -141).
+Cast(-215, -103).
+
+Movie(-216, "Mad Max", 1979, -142).
+Cast(-216, -112).
+Cast(-216, -143).
+Cast(-216, -144).
+Sequel(-216, -217).
+
+Movie(-217, "Mad Max 2", 1981, -142).
+Cast(-217, -112).
+Cast(-217, -145).
+Cast(-217, -146).
+Sequel(-217, -218).
+
+Movie(-218, "Mad Max Beyond Thunderdome", 1985, -142).
+Movie(-218, "Mad Max Beyond Thunderdome", 1985, -147). /* multiple directors */
+Cast(-218, -112).
+Cast(-218, -148).
+
+Movie(-219, "Braveheart", 1995, -112).
+Cast(-219, -112).
+Cast(-219, -149).
+
+.decl Chapter1Ex(id:number)
+Chapter1Ex(id) :- Movie(id, _, 1987, _).
+.output Chapter1Ex
+
+.decl Chapter2Ex(title:symbol)
+.decl Chapter2a(name:symbol)
+Chapter2Ex(title) :- Movie(_, title, 1987, _).
+Chapter2a(name) :- Movie(movie_id, "Lethal Weapon", _, _),
+		   Cast(movie_id, person_id),
+		   Person(person_id, name, _, _). 
+.output Chapter2a
+
+.decl Chapter3a(title:symbol)
+ Chapter3a(title) :-
+     Person(james_id, "James Cameron", _, _),
+     Person(arnold_id, "Arnold Schwarzenegger", _, _),
+     Cast(movie_id, arnold_id),
+     Movie(movie_id, title, _, james_id).
+.output Chapter3a
+
+.decl Chapter5Ex(title:symbol)
+Chapter5Ex(title) :- Movie(_, title, year, _), year<=1979.
+.output Chapter5Ex
+
+.decl Ages(person_id:number, age:number)
+Ages(id, age) :- Person(id, _, birth, _),
+		 now = @localtimestamp(),
+		 birthts = @from_date(birth),
+		 age = (now - birthts) / 60/60/24/365.
+ 
+.decl Chapter6Ex(name:symbol, age:number)
+.decl Chapter6Ex2(name:symbol, age:number)
+Chapter6Ex(name, age) :- Person(id, name, _, _),
+			 Ages(id, age), age=70.
+Chapter6Ex2(name, age) :- Person(_, name, birth, _),
+			  age = @age(@localtimestamp(), @from_date(birth)),
+			  age = 70.
+.output Chapter6Ex
+.output Chapter6Ex2
+
+.decl Chapter7Ex(n:number)
+Chapter7Ex(n) :- n = count : {Movie(_, _, _, _)}.
+.output Chapter7Ex
+
+.decl AssociatedWith(movie_id:number,person_id:number)
+.decl Chapter8a(name:symbol)
+.decl Chapter8b(name:symbol,n:number)
+AssociatedWith(person_id,movie_id) :- Cast(movie_id, person_id).
+AssociatedWith(person_id,movie_id) :- Movie(movie_id,_,_,person_id).
+Chapter8a(name) :- Movie(movie_id, "Predator", _, _),
+		   AssociatedWith(person_id, movie_id),
+		   Person(person_id, name, _, _).
+Chapter8b(name,n) :- Person(person_id, name, _, _),
+		     n = count : {AssociatedWith(person_id, movie_id),
+				  AssociatedWith(person_id, movie2_id),
+				  movie_id < movie2_id,
+				  AssociatedWith(person2_id,movie_id),
+				  AssociatedWith(person2_id,movie2_id),
+				  person_id != person2_id},
+		     n>0.
+.output Chapter8a
+.output Chapter8b
+ 

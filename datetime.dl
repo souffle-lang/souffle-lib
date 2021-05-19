@@ -1,0 +1,29 @@
+// declare timestamp as derived from number
+.type timestamp <: number
+
+// convert a string with a given format to a timestamp
+.functor to_timestamp(string:symbol, format:symbol) : timestamp
+
+// convert a date string to a timestamp
+.functor from_date(date:symbol) : timestamp
+
+// convert a date-time string to a timestamp
+.functor from_date_time(date:symbol) : timestamp
+
+// convert a timestamp to the number of days from 1970-01-01
+.functor to_day(time:timestamp) : number
+
+// convert a timestamp and format to a string
+.functor from_timestamp(time:timestamp, format:symbol) : symbol
+
+// convert a timestamp to a date string
+.functor to_date(time:timestamp) : symbol
+
+// convert a timestamp to a date-time string
+.functor to_date_time(time:timestamp) : symbol
+
+// calculate the age in completed years from a timestamp for the birth to the timestamp for an event
+.functor age(event:timestamp, birth:timestamp) : number
+
+// return the current local timestamp
+.functor localtimestamp() : timestamp
