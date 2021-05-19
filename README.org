@@ -11,9 +11,28 @@ By default, Souffle is compiled with C `int32_t` and `float` for the  `number` a
 
 * Math functions
 
-As a simple example, we have the following Souffle [[https://github.com/mclements/souffle-math/blob/main/test.dl][test.dl]] file:
+The C99 math function names vary for `float` and `double`. We have provided for each in [[https://github.com/souffle-lang/souffle-lib/blob/main/math_32.dl][math_32.dl]] and [[https://github.com/souffle-lang/souffle-lib/blob/main/math_64.dl][math_64.dl]], respectively. These files provide documentation on the calls (which simply call the C functions of the same names). The setup of the library may be as simple as:
 
-The C99 math function names vary for `float` and `double`. We have provided for each in [[https://github.com/souffle-lang/souffle-lib/blob/main/math_32.dl][math_32.dl]] and [[https://github.com/souffle-lang/souffle-lib/blob/main/math_64.dl][math_64.dl]], respectively. These files provide documentation on the calls (which simply call the C functions of the same names). Assuming doubles:
+#+BEGIN_SRC shell :exports results :results verbatim
+  make clean && make
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+./configure
+configure: creating ./config.status
+config.status: creating math.dl
+configure: creating ./config.status
+config.status: creating math.dl
+config.status: creating test.dl
+configure: creating ./config.status
+config.status: creating math.dl
+config.status: creating test.dl
+config.status: creating datetime.cpp
+g++ -shared -fPIC datetime.cpp -o libfunctors.so
+#+end_example
+
+As a simple example and assuming a 64-bit configuration, we have the following Souffle [[https://github.com/souffle-lang/souffle-lib/blob/main/test_64.dl][test_64.dl]] file (we could also have used the math.dl function, which is configured to switch between test_32.dl and test_64.dl):
 
 #+BEGIN_SRC shell :exports results :results verbatim
   cat test_64.dl
@@ -46,6 +65,7 @@ This reads in the functor definitions, declares a Summary relationship, and calc
 | @log(@exp(1.0)) |                 1 |
 | =============== |                   |
 
+
 * Datetime (timestamps)
 
 This library also defines a small set of functors for using some of the C date-time functions.
@@ -53,11 +73,13 @@ This library also defines a small set of functors for using some of the C date-t
 As a simple example, we have the following Souffle [[https://github.com/souffle-lang/souffle-lib/blob/main/test_datetime.dl][test_datetime.dl]] file:
 
 #+BEGIN_SRC shell :exports results :results verbatim
+  make
   cat test_datetime.dl
 #+END_SRC
 
 #+RESULTS:
 #+begin_example
+make: Nothing to be done for 'setup'.
 #include "datetime.dl"
 
 .decl Times(timestamp:timestamp)
@@ -82,7 +104,6 @@ Test("@age	", timestamp1, to_string(@age(timestamp1,timestamp2))) :-
 This reads in the functor definitions, declares relationships for times and test results, and calculates test results for each of the times. The code to run this in the interpreter is =souffle test.dl= or, in the compiler, =souffle -c test.dl=. As an example:
 
 #+BEGIN_SRC shell :exports both
-  g++ -shared -fPIC datetime.cpp -o libfunctors.so
   souffle -D- test_datetime.dl
 #+END_SRC
 
@@ -95,29 +116,29 @@ This reads in the functor definitions, declares relationships for times and test
 | @to_day         |             |       -3600 |        0 |
 | @to_day         |             |       82800 |        1 |
 | @to_day         |             |      169200 |        2 |
-| @to_day         |             |  1621431508 |    18766 |
+| @to_day         |             |  1621432933 |    18766 |
 | @to_date        | -2209078814 |  1899-12-31 |          |
 | @to_date        |       -3600 |  1970-01-01 |          |
 | @to_date        |       82800 |  1970-01-02 |          |
 | @to_date        |      169200 |  1970-01-03 |          |
-| @to_date        |  1621431508 |  2021-05-19 |          |
+| @to_date        |  1621432933 |  2021-05-19 |          |
 | @to_date_time   | -2209078814 |  1899-12-31 | 00:00:00 |
 | @to_date_time   |       -3600 |  1970-01-01 | 00:00:00 |
 | @to_date_time   |       82800 |  1970-01-02 | 00:00:00 |
 | @to_date_time   |      169200 |  1970-01-03 | 00:00:00 |
-| @to_date_time   |  1621431508 |  2021-05-19 | 15:38:28 |
+| @to_date_time   |  1621432933 |  2021-05-19 | 16:02:13 |
 | @from_timestamp | -2209078814 |  31/12/1899 |          |
 | @from_timestamp |       -3600 |  01/01/1970 |          |
 | @from_timestamp |       82800 |  02/01/1970 |          |
 | @from_timestamp |      169200 |  03/01/1970 |          |
-| @from_timestamp |  1621431508 |  19/05/2021 |          |
+| @from_timestamp |  1621432933 |  19/05/2021 |          |
 | @age            |             |       -3600 |       70 |
 | @age            |             |       82800 |        0 |
 | @age            |             |       82800 |       70 |
 | @age            |             |      169200 |        0 |
 | @age            |             |      169200 |       70 |
-| @age            |             |  1621431508 |      121 |
-| @age            |             |  1621431508 |       51 |
+| @age            |             |  1621432933 |      121 |
+| @age            |             |  1621432933 |       51 |
 | =============== |             |             |          |
 
 Documentation is available in the [[https://github.com/souffle-lang/souffle-lib/blob/main/datetime.dl][datetime.dl]] file.
