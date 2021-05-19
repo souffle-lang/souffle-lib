@@ -13,7 +13,7 @@ By default, Souffle is compiled with C `int32_t` and `float` for the  `number` a
 
 The C99 math function names vary for `float` and `double`. We have provided for each in [[https://github.com/souffle-lang/souffle-lib/blob/main/math_32.dl][math_32.dl]] and [[https://github.com/souffle-lang/souffle-lib/blob/main/math_64.dl][math_64.dl]], respectively. These files provide documentation on the calls (which simply call the C functions of the same names). The setup of the library may be as simple as:
 
-#+BEGIN_SRC shell :exports results :results verbatim
+#+BEGIN_SRC shell :exports both :results verbatim
   make clean && make
 #+END_SRC
 
