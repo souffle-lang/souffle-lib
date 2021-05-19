@@ -1,3 +1,7 @@
+setup: libfunctors.so math.dl test.dl
+
+# Testing and examples
+
 test: test_datetime test_math
 
 test_math: test.dl math.dl
@@ -16,6 +20,8 @@ rosetta: libfunctors.so
 movie: libfunctors.so
 	souffle -D- movie.dl
 
+# Configure for 32/64 bit and compile
+
 libfunctors.so: datetime.cpp
 	g++ -shared -fPIC datetime.cpp -o libfunctors.so
 
@@ -32,7 +38,7 @@ configure: configure.ac
 	autoconf
 
 clean:
-	rm -f test.dl
-	rm -f math.dl
-	rm -f libfunctors.so
-	rm -f datetime.cpp
+	@rm -f test.dl
+	@rm -f math.dl
+	@rm -f libfunctors.so
+	@rm -f datetime.cpp
