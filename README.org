@@ -1,13 +1,13 @@
 #+title: C libraries for Souffle
 #+author: Mark Clements
 
-#+options: toc:nil html-postamble:nil num:nil
+#+options: toc:nil html-postamble:nil num:nil ^:nil
 
 * Introduction
 
 [[https://souffle-lang.github.io/index.html][Souffle]] is a capable Datalog implementation which allows for relatively easy integration with C functions. This library defines a set of functors for using some of the C math and datetime (timestamp) functions in Souffle.
 
-By default, Souffle is compiled with C =int32_t= and =float= for the  =number= and =float= types, respectively. Souffle can also be configures to use =int64_t= and =double= for those types by using =./configure --enable-64bit-domain=. We have have used =autoconf= and =configure= to allow for these differences.
+By default, Souffle is compiled with C =int32_t= and =float= for the  =number= and =float= types, respectively. Souffle can also be configures to use =int64_t= and =double= for those types by using =./configure --enable-64bit-domain=. We have used =autoconf= and =configure= to allow for these differences.
 
 * Setup
 
@@ -34,9 +34,9 @@ g++ -shared -fPIC datetime.cpp -o libfunctors.so
 
 * Math functions
 
-The C99 math function names vary for =float= and =double=. We have provided for each in [[https://github.com/souffle-lang/souffle-lib/blob/main/math_32.dl][math_32.dl]] and [[https://github.com/souffle-lang/souffle-lib/blob/main/math_64.dl][math_64.dl]], respectively. These files provide documentation on the calls (which call the C functions of the same names).
+The C99 math function names differ for =float= and =double= arguments. We have provided for each in [[https://github.com/souffle-lang/souffle-lib/blob/main/math_32.dl][math_32.dl]] and [[https://github.com/souffle-lang/souffle-lib/blob/main/math_64.dl][math_64.dl]], respectively. These files provide documentation on the calls (which call the C functions of the same names). We have also provided the =math.dl= file, which is configured to switch between =math_32.dl= and =math_64.dl=.
 
-As a simple example and assuming a 64-bit configuration, we have the following Souffle [[https://github.com/souffle-lang/souffle-lib/blob/main/test_64.dl][test_64.dl]] file (we could also have used the math.dl function, which is configured to switch between test_32.dl and test_64.dl):
+As a simple example and assuming a 64-bit configuration, we have the following Souffle [[https://github.com/souffle-lang/souffle-lib/blob/main/test_64.dl][test_64.dl]] file (we could also have used the =test.dl= file, which is configured to switch between =test_32.dl= and =test_64.dl=):
 
 #+BEGIN_SRC shell :exports results :results verbatim
   cat test_64.dl
@@ -52,7 +52,7 @@ As a simple example and assuming a 64-bit configuration, we have the following S
 : Summary("@log(@exp(1.0))", @log(@exp(1.0))) :- true.
 : .output Summary
 
-This reads in the functor definitions, declares a Summary relationship, and calculates two values. The code to run this in the interpreter may be as simple as =souffle -lm test_64.dl= or in the compiler using =souffle -c -lm test_64.dl=. However, when =libm= is an ld script, this code will not work for the Souffle interpreter. To address this case, we have provided a bash script =lib_ldscript= for transforming the library arguments when there is an ld script. As an example:
+This reads in the functor definitions, declares a Summary relationship, and calculates some values. The code to run this in the interpreter may be as simple as =souffle -lm test_64.dl= or in the compiler using =souffle -c -lm test_64.dl=. However, when =libm= is an ld script, this code will not work for the Souffle interpreter. To address this case, we have provided a bash script =lib_ldscript= for transforming the library arguments when there is an ld script. As an example:
 
 #+BEGIN_SRC shell :exports both
   souffle -D- `lib_ldscript -lm` test_64.dl
@@ -69,21 +69,18 @@ This reads in the functor definitions, declares a Summary relationship, and calc
 | @log(@exp(1.0)) |                 1 |
 | =============== |                   |
 
+As a reminder, the =-D-= argument send the output values to =stdout= rather than to files.
 
 * Datetime (timestamps)
 
-This library also defines a small set of functors for using some of the C date-time functions.
-
-As a simple example, we have the following Souffle [[https://github.com/souffle-lang/souffle-lib/blob/main/test_datetime.dl][test_datetime.dl]] file:
+This library also defines a small set of functors for using some of the C date-time functions. Documentation is available in the [[https://github.com/souffle-lang/souffle-lib/blob/main/datetime.dl][datetime.dl]] file. Note that the =datetime.cpp= file has been configured to use either =int32_t= or =int64_t= integer types. As a simple example, we have the following Souffle [[https://github.com/souffle-lang/souffle-lib/blob/main/test_datetime.dl][test_datetime.dl]] file:
 
 #+BEGIN_SRC shell :exports results :results verbatim
-  make
   cat test_datetime.dl
 #+END_SRC
 
 #+RESULTS:
 #+begin_example
-make: Nothing to be done for 'setup'.
 #include "datetime.dl"
 
 .decl Times(timestamp:timestamp)
@@ -107,42 +104,43 @@ Test("@age	", timestamp1, to_string(@age(timestamp1,timestamp2))) :-
 
 This reads in the functor definitions, declares relationships for times and test results, and calculates test results for each of the times. The code to run this in the interpreter is =souffle test.dl= or, in the compiler, =souffle -c test.dl=. As an example:
 
-#+BEGIN_SRC shell :exports both
+#+BEGIN_SRC shell :exports both :results value code
   souffle -D- test_datetime.dl
 #+END_SRC
 
 #+RESULTS:
-| --------------- |             |             |          |
-| Test            |             |             |          |
-| operator        |   timestamp |      result |          |
-| =============== |             |             |          |
-| @to_day         |             | -2209078814 |   -25568 |
-| @to_day         |             |       -3600 |        0 |
-| @to_day         |             |       82800 |        1 |
-| @to_day         |             |      169200 |        2 |
-| @to_day         |             |  1621432933 |    18766 |
-| @to_date        | -2209078814 |  1899-12-31 |          |
-| @to_date        |       -3600 |  1970-01-01 |          |
-| @to_date        |       82800 |  1970-01-02 |          |
-| @to_date        |      169200 |  1970-01-03 |          |
-| @to_date        |  1621432933 |  2021-05-19 |          |
-| @to_date_time   | -2209078814 |  1899-12-31 | 00:00:00 |
-| @to_date_time   |       -3600 |  1970-01-01 | 00:00:00 |
-| @to_date_time   |       82800 |  1970-01-02 | 00:00:00 |
-| @to_date_time   |      169200 |  1970-01-03 | 00:00:00 |
-| @to_date_time   |  1621432933 |  2021-05-19 | 16:02:13 |
-| @from_timestamp | -2209078814 |  31/12/1899 |          |
-| @from_timestamp |       -3600 |  01/01/1970 |          |
-| @from_timestamp |       82800 |  02/01/1970 |          |
-| @from_timestamp |      169200 |  03/01/1970 |          |
-| @from_timestamp |  1621432933 |  19/05/2021 |          |
-| @age            |             |       -3600 |       70 |
-| @age            |             |       82800 |        0 |
-| @age            |             |       82800 |       70 |
-| @age            |             |      169200 |        0 |
-| @age            |             |      169200 |       70 |
-| @age            |             |  1621432933 |      121 |
-| @age            |             |  1621432933 |       51 |
-| =============== |             |             |          |
+#+BEGIN_SRC shell
+---------------
+Test
+operator	timestamp	result
+===============
+@to_day		-2209078814	-25568
+@to_day		-3600	0
+@to_day		82800	1
+@to_day		169200	2
+@to_day		1621490945	18767
+@to_date	-2209078814	1899-12-31
+@to_date	-3600	1970-01-01
+@to_date	82800	1970-01-02
+@to_date	169200	1970-01-03
+@to_date	1621490945	2021-05-20
+@to_date_time	-2209078814	1899-12-31 00:00:00
+@to_date_time	-3600	1970-01-01 00:00:00
+@to_date_time	82800	1970-01-02 00:00:00
+@to_date_time	169200	1970-01-03 00:00:00
+@to_date_time	1621490945	2021-05-20 08:09:05
+@from_timestamp	-2209078814	31/12/1899
+@from_timestamp	-3600	01/01/1970
+@from_timestamp	82800	02/01/1970
+@from_timestamp	169200	03/01/1970
+@from_timestamp	1621490945	20/05/2021
+@age		-3600	70
+@age		82800	0
+@age		82800	70
+@age		169200	0
+@age		169200	70
+@age		1621490945	121
+@age		1621490945	51
+===============
+#+END_SRC
 
-Documentation is available in the [[https://github.com/souffle-lang/souffle-lib/blob/main/datetime.dl][datetime.dl]] file.
