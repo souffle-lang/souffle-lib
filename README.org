@@ -31,6 +31,12 @@ config.status: creating datetime.cpp
 g++ -shared -fPIC datetime.cpp -o libfunctors.so
 #+end_example
 
+In the following examples, we have used test examples that are in the same directory as the library files and assume that there is no other =libfunctors.so= or =libfunctors.dylib= file. For using the library from another folder, you may need to change:
+  1. The =-L= argument to be the library directory to use the datetime functions,
+  2. The paths for the included =souffle-lib= library Datalog files.
+  3. If you have your own compiled shared library that is also called =libfunctors.so= or or =libfunctors.dylib=, then you will need to rename one of the shared libraries and use the =-l= argument.
+
+
 
 * Math functions
 
@@ -69,7 +75,7 @@ This reads in the functor definitions, declares a Summary relationship, and calc
 | @log(@exp(1.0)) |                 1 |
 | =============== |                   |
 
-As a reminder, the =-D-= argument send the output values to =stdout= rather than to files.
+As a reminder, the =-D-= argument sends the output values to =stdout= rather than to files.
 
 * Datetime (timestamps)
 
