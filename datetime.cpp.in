@@ -64,7 +64,7 @@ extern "C" {
   const char* from_timestamp(int_type timestamp, const char *format) {
     char * buf = new char[100]; // is this memory safe?
     time_t t(timestamp);
-    strftime(buf, 20, format, localtime(&t));
+    strftime(buf, 100, format, localtime(&t));
     return buf;
   }
   
