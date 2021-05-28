@@ -98,7 +98,7 @@ Times(@to_timestamp("03/01/1970", "%d/%m/%Y")) :- true.
 Times(@localtimestamp()) :- true.
 Times(@from_date("")) :- true.
 
-Test("@to_day	", timestamp, to_string(@to_day(timestamp))) :- Times(timestamp).
+Test("@to_days	", timestamp, to_string(@to_days(timestamp))) :- Times(timestamp).
 Test("@to_date", timestamp, @to_date(timestamp)) :- Times(timestamp).
 Test("@to_date_time", timestamp, @to_date_time(timestamp)) :- Times(timestamp).
 Test("@from_timestamp", timestamp, @from_timestamp(timestamp,"%d/%m/%Y")) :- Times(timestamp).
@@ -115,38 +115,4 @@ This reads in the functor definitions, declares relationships for times and test
 #+END_SRC
 
 #+RESULTS:
-#+begin_example
----------------
-Test
-operator	timestamp	result
-===============
-@to_day		-2209078814	-25568
-@to_day		-3600	0
-@to_day		82800	1
-@to_day		169200	2
-@to_day		1621493174	18767
-@to_date	-2209078814	1899-12-31
-@to_date	-3600	1970-01-01
-@to_date	82800	1970-01-02
-@to_date	169200	1970-01-03
-@to_date	1621493174	2021-05-20
-@to_date_time	-2209078814	1899-12-31 00:00:00
-@to_date_time	-3600	1970-01-01 00:00:00
-@to_date_time	82800	1970-01-02 00:00:00
-@to_date_time	169200	1970-01-03 00:00:00
-@to_date_time	1621493174	2021-05-20 08:46:14
-@from_timestamp	-2209078814	31/12/1899
-@from_timestamp	-3600	01/01/1970
-@from_timestamp	82800	02/01/1970
-@from_timestamp	169200	03/01/1970
-@from_timestamp	1621493174	20/05/2021
-@age		-3600	70
-@age		82800	0
-@age		82800	70
-@age		169200	0
-@age		169200	70
-@age		1621493174	121
-@age		1621493174	51
-===============
-#+end_example
 

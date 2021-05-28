@@ -9,7 +9,7 @@ Times(@to_timestamp("03/01/1970", "%d/%m/%Y")) :- true.
 Times(@localtimestamp()) :- true.
 Times(@from_date("")) :- true.
 
-Test("@to_day	", timestamp, to_string(@to_day(timestamp))) :- Times(timestamp).
+Test("@to_days	", timestamp, to_string(@to_days(timestamp))) :- Times(timestamp).
 Test("@to_date", timestamp, @to_date(timestamp)) :- Times(timestamp).
 Test("@to_date_time", timestamp, @to_date_time(timestamp)) :- Times(timestamp).
 Test("@from_timestamp", timestamp, @from_timestamp(timestamp,"%d/%m/%Y")) :- Times(timestamp).

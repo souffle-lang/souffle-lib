@@ -56,7 +56,7 @@ extern "C" {
     return difftime(rawtime, gmt)-3600*ptm->tm_isdst;
   }
 
-  int_type to_day(int_type timestamp) {
+  int_type to_days(int_type timestamp) {
     // localtime adjustment for correct day calculations
     return (timestamp+localdiff())/86400; 
   }
